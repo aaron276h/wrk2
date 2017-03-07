@@ -3,8 +3,19 @@
 
 done = function(summary, latency, requests)
    io.write("------------------------------\n")
-   io.write("Number of requests: ", summary.requests, " Latencies:\n")
+   
+   -- generate random id for the output file 
+   math.randomseed(latency.mean+latency.stdev)
+   file_id = math.random((latency.max + 100) * 10000)
+   file_path = "/tmp/wrk_output/" .. file_id
+   io.write(file_path, "\n")
+
+   -- write latencies to file
+   file = io.open(file_path, "a")
+
    for i=0,summary.requests,1 do
-       io.write(latency[i], "\n")
+       file:write(latency[i], "\n")
    end
+
+   file:close()
 end
